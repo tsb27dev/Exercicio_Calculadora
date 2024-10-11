@@ -5,12 +5,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
@@ -18,7 +16,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ButtonDefaults.buttonColors
 import androidx.compose.ui.text.font.FontWeight
 import pt.ipca.calculator.ui.theme.CalculatorTheme
 
@@ -71,7 +68,7 @@ fun Calculator() {
                 verticalArrangement = Arrangement.spacedBy(8.dp) // Manage the space between rows
             ) {
 
-                val botões = listOf(
+                val botoes = listOf(
                     listOf("MRC", "M-", "M+", "ON/C"),
                     listOf("√", "%", "+/-", "CE"),
                     listOf("7", "8", "9", "/"),
@@ -80,14 +77,14 @@ fun Calculator() {
                     listOf("0", ".", "=", "+")
                 )
 
-                for (row in botões) {
+                for (row in botoes) {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
-                        for (textoBotão in row) {
-                            val corBotão = when (textoBotão) {
+                        for (textoBotao in row) {
+                            val corBotao = when (textoBotao) {
                                 "CE", "ON/C" -> ButtonDefaults.buttonColors(
                                     containerColor = Color(0xFFE25778), // Rosado para "clear"
                                     contentColor = Color.White
@@ -104,13 +101,13 @@ fun Calculator() {
                             Button(
                                 onClick = {
                                     handleButtonClick(
-                                        textoBotão,
+                                        textoBotao,
                                         digitos,
                                         currentInput,
                                         primeiroValor,
                                         operador,
-                                        valorGuardado,  // Pass memory value
-                                        setValorGuardado = { valorGuardado = it },  // Pass setter for memory value
+                                        valorGuardado,
+                                        setValorGuardado = { valorGuardado = it },
                                         setDigitos = { digitos = it },
                                         setInput = { currentInput = it },
                                         setPrimeiroValor = { primeiroValor = it },
@@ -118,14 +115,14 @@ fun Calculator() {
                                     )
                                 },
                                 modifier = Modifier
-                                    .width(95.dp) // Increase the width to give more space for text
-                                    .height(60.dp) // Adjust the size as needed to reduce bottom space
-                                    .padding(2.dp),  // Add padding to separate buttons slightly
+                                    .width(95.dp)
+                                    .height(60.dp)
+                                    .padding(2.dp),
                                 shape = RoundedCornerShape(8.dp),
-                                colors = corBotão
+                                colors = corBotao
                             ) {
                                 Text(
-                                    text = textoBotão,
+                                    text = textoBotao,
                                     softWrap = false,
                                     fontSize = 16.sp,
                                     fontWeight = FontWeight.Bold,
@@ -145,7 +142,7 @@ fun Calculator() {
 
 
 fun handleButtonClick(
-    textoBotão: String,
+    textoBotao: String,
     digitos: String,
     input: String,
     primeiroValor: Double,
@@ -173,7 +170,7 @@ fun handleButtonClick(
         }
     }
 
-    when (textoBotão) {
+    when (textoBotao) {
         "MRC" -> {
             setDigitos(formatarValorGuardado(valorGuardado))
             setInput(formatarValorGuardado(valorGuardado))
@@ -206,8 +203,8 @@ fun handleButtonClick(
                 setDigitos(percentagemFormatada)
                 setInput(percentagemFormatada)
             } else {
-                val resultado = currentInput / 100
-                val resultadoFormatado = formatarResultado(resultado)
+                val res = currentInput / 100
+                val resultadoFormatado = formatarResultado(res)
                 setDigitos(resultadoFormatado)
                 setInput(resultadoFormatado)
             }
@@ -231,14 +228,14 @@ fun handleButtonClick(
             }
         }
         in "0".."9", "." -> {
-            val newInput = input + textoBotão
+            val newInput = input + textoBotao
             setInput(newInput)
             setDigitos(newInput)
         }
         "+", "-", "*", "/" -> {
             setPrimeiroValor(input.toDouble())
             setInput("")
-            setOperador(textoBotão)
+            setOperador(textoBotao)
         }
         "=" -> {
             val segundoValor = input.toDouble()
