@@ -35,7 +35,7 @@ fun CalculatorView(
     val onNumberClick : (String) -> Unit = { number ->
         if(userIsTypingNumber) {
             if (number == ".") {
-                if (!(displayText.contains("."))) {
+                if (!displayText.contains(".")) {
                     displayText += number
                 }
             } else {
@@ -47,6 +47,7 @@ fun CalculatorView(
             }
         }else{
             displayText = number
+            userIsTypingNumber = true
         }
     }
 
@@ -63,12 +64,7 @@ fun CalculatorView(
         } else {
             result.toString()
         }
-
-        // Para operações unárias (√, %, +/-), continuar digitando
-        userIsTypingNumber = when(operation) {
-            "√", "%", "+/-" -> true
-            else -> false
-        }
+        userIsTypingNumber = false
     }
 
     val onMemoryClick : (String) -> Unit = { memory ->
@@ -126,7 +122,7 @@ fun CalculatorView(
             textAlign = TextAlign.End,
             color = Color.Black
 
-        )}
+        )
 
     Column(
         modifier = modifier
@@ -136,42 +132,43 @@ fun CalculatorView(
     ) {
 
         Row {
-            CalculatorButton(label ="MRC", isOperation = true, onClick = onMemoryClick )
-            CalculatorButton(label ="M-", isOperation = true, onClick = onMemoryClick )
-            CalculatorButton(label ="M+", isOperation = true, onClick = onMemoryClick )
-            CalculatorButton(label ="ON", isON = true, onClick = onClearClick )
+            CalculatorButton(label = "MRC", isOperation = true, onClick = onMemoryClick )
+            CalculatorButton(label = "M-", isOperation = true, onClick = onMemoryClick )
+            CalculatorButton(label = "M+", isOperation = true, onClick = onMemoryClick )
+            CalculatorButton(label = "ON", isON = true, onClick = onClearClick )
         }
         Row {
-            CalculatorButton(label ="√", isOperation = true, onClick = onNumberClick )
-            CalculatorButton(label ="%", isOperation = true, onClick = onNumberClick )
-            CalculatorButton(label ="+/-", isOperation = true,  onClick = onNumberClick )
+            CalculatorButton(label ="√", isOperation = true, onClick = onOperationClick )
+            CalculatorButton(label ="%", isOperation = true, onClick = onOperationClick )
+            CalculatorButton(label ="+/-", isOperation = true,  onClick = onOperationClick )
             CalculatorButton(label ="CE", isON = true, onClick = onClearClick )
         }
         Row {
             CalculatorButton(label ="7", onClick = onNumberClick )
             CalculatorButton(label ="8", onClick = onNumberClick )
             CalculatorButton(label ="9", onClick = onNumberClick )
-            CalculatorButton(label ="/", isOperation = true, onClick = onOperationClick )
+            CalculatorButton(label = "/", isOperation = true, onClick = onOperationClick )
         }
         Row {
-            CalculatorButton(label ="4", onClick = onNumberClick )
-            CalculatorButton(label ="5", onClick = onNumberClick )
-            CalculatorButton(label ="6", onClick = onNumberClick )
-            CalculatorButton(label ="x", isOperation = true, onClick = onOperationClick )
+            CalculatorButton(label = "4", onClick = onNumberClick )
+            CalculatorButton(label = "5", onClick = onNumberClick )
+            CalculatorButton(label = "6", onClick = onNumberClick )
+            CalculatorButton(label = "x", isOperation = true, onClick = onOperationClick )
         }
         Row {
-            CalculatorButton(label ="1", onClick = onNumberClick )
-            CalculatorButton(label ="2", onClick = onNumberClick )
-            CalculatorButton(label ="3", onClick = onNumberClick )
-            CalculatorButton(label ="-", isOperation = true, onClick = onOperationClick )
+            CalculatorButton(label = "1", onClick = onNumberClick )
+            CalculatorButton(label = "2", onClick = onNumberClick )
+            CalculatorButton(label = "3", onClick = onNumberClick )
+            CalculatorButton(label = "-", isOperation = true, onClick = onOperationClick )
         }
         Row {
-            CalculatorButton(label ="0", onClick = onNumberClick )
-            CalculatorButton(label =".", onClick = onNumberClick )
-            CalculatorButton(label ="=", isOperation = true, onClick = onOperationClick )
-            CalculatorButton(label ="+", isOperation = true, onClick = onOperationClick )
+            CalculatorButton(label = "0", onClick = onNumberClick )
+            CalculatorButton(label = ".", onClick = onNumberClick )
+            CalculatorButton(label = "=", isOperation = true, onClick = onOperationClick )
+            CalculatorButton(label = "+", isOperation = true, onClick = onOperationClick )
         }
     }
+}
 }
 
 @Preview(showBackground = true)

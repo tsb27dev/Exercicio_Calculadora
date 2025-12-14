@@ -8,6 +8,8 @@ class CalculatorBrain {
     private var memory = 0.0
     private var pendingOperation: Operation? = null
     private var previousOperand = 0.0
+    private var lastOperationForRepetition: Operation? = null
+    private var lastOperandForRepetition = 0.0
 
     enum class Operation {
         ADD,
@@ -41,33 +43,42 @@ class CalculatorBrain {
         when(newOperation) {
             Operation.SQUARE_ROOT -> {
                 operand = sqrt(newOperand)
+                lastOperationForRepetition = null
                 return operand
             }
             Operation.PERCENT -> {
                 operand = newOperand / 100
+                lastOperationForRepetition = null
                 return operand
             }
             Operation.CHANGE_SIGN -> {
                 operand = -newOperand
+                lastOperationForRepetition = null
                 return operand
             }
             Operation.EQUALS -> {
                 if (pendingOperation != null) {
-                    operand = executeOperation(previousOperand, newOperand, pendingOperation!!)
+                    val secondOperand = newOperand
+                    operand = executeOperation(previousOperand, secondOperand, pendingOperation!!)
+                    lastOperationForRepetition = pendingOperation
+                    lastOperandForRepetition = secondOperand
                     pendingOperation = null
+                } else if (lastOperationForRepetition != null) {
+                    operand = executeOperation(operand, lastOperandForRepetition, lastOperationForRepetition!!)
                 } else {
                     operand = newOperand
                 }
                 return operand
             }
             Operation.ADD, Operation.SUBTRACT, Operation.MULTIPLY, Operation.DIVIDE -> {
-                if (pendingOperation != null) {
-                    operand = executeOperation(previousOperand, newOperand, pendingOperation!!)
+                operand = if (pendingOperation != null) {
+                    executeOperation(previousOperand, newOperand, pendingOperation!!)
                 } else {
-                    operand = newOperand
+                    newOperand
                 }
                 previousOperand = operand
                 pendingOperation = newOperation
+                lastOperationForRepetition = null
                 return operand
             }
         }
@@ -115,6 +126,7 @@ class CalculatorBrain {
         memory = 0.0
         pendingOperation = null
         previousOperand = 0.0
+        lastOperationForRepetition = null
     }
 
     // Verifica se há algo na memória
